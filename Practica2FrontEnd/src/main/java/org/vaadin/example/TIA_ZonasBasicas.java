@@ -1,8 +1,15 @@
 package org.vaadin.example;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
@@ -85,11 +92,55 @@ public class TIA_ZonasBasicas {
     }
 
 
-    public List<TIA_ZonasBasicas> deserializarZonasBasicas(String json) {
+    public static List<TIA_ZonasBasicas> deserializarZonasBasicas(String json) {
         Gson gson = new Gson();
         TypeToken<List<TIA_ZonasBasicas>> token = new TypeToken<List<TIA_ZonasBasicas>>() {};
         List<TIA_ZonasBasicas> listaZonasBasicas = gson.fromJson(json, token.getType());
         return listaZonasBasicas;
     }
 
-}
+    //Método para comrpobar que se ha deserializado correctamente
+    public static void main(String[] args) {
+        // Ruta del archivo JSON
+        String filePath = "src/main/resources/Covid19-TIA_ZonasBásicasSalud.json";
+
+        // Leer el contenido del archivo y convertirlo en una cadena de texto
+        String json = readFileAsString(filePath);
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy/MM/dd HH:mm:ss");
+        Gson gson = gsonBuilder.create();
+
+        DataWrapper wrapper = gson.fromJson(json, DataWrapper.class);
+        List<TIA_ZonasBasicas> listaZonas = wrapper.getData();
+
+        if (listaZonas != null && !listaZonas.isEmpty()) {
+            for (TIA_ZonasBasicas zona : listaZonas) {
+                System.out.println("Código de Geometría: " + zona.getCodigo_geometria());
+                System.out.println("Zona Básica de Salud: " + zona.getZona_basica_salud());
+                System.out.println("Tasa de Incidencia Acumulada en los Últimos 14 Días: " + zona.getTasa_incidencia_acumulada_ultimos_14dias());
+                System.out.println("Tasa de Incidencia Acumulada Total: " + zona.getTasa_incidencia_acumulada_total());
+                System.out.println("Casos Confirmados Totales: " + zona.getCasos_confirmados_totales());
+                System.out.println("Fecha de Informe: " + zona.getFecha_informe());
+                System.out.println("--------------------------");
+            }
+        } else {
+            System.out.println("Error en la deserialización del JSON.");
+        }
+    }
+
+    //Método para leer el archivo JSON
+    public static String readFileAsString(String filePath) {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
+    }
+

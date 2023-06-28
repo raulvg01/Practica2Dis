@@ -29,9 +29,4 @@ public class JsonDeserializer<T> {
             return gson.fromJson(reader, listType);
         }
     }
-
-
-
-
-
 }
