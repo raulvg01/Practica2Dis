@@ -4,12 +4,15 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * A sample Vaadin view class.
@@ -41,15 +44,16 @@ public class MainView extends VerticalLayout {
      */
     public MainView(@Autowired GreetService service) {
 
-        TextField resultado = new TextField("Resultado");
+        Span span = new Span("Hello world");
 
-        // Use TextField for standard text input
-        TextField textField = new TextField("Your name");
-        textField.addThemeName("bordered");
 
         // Button click listeners can be defined as lambda expressions
-        Button button = new Button("Say hello",
-                e -> Notification.show(service.greet(textField.getValue())));
+        Button button = new Button("Mostrar lista",
+                e -> {
+
+
+
+                });
 
         // Theme variants give you predefined extra styles for components.
         // Example: Primary button has a more prominent look.
@@ -62,7 +66,7 @@ public class MainView extends VerticalLayout {
         // Use custom CSS classes to apply styling. This is defined in shared-styles.css.
         addClassName("centered-content");
 
-        add(textField, button);
+        add(span, button);
     }
 
 }

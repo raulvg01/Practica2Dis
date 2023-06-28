@@ -100,7 +100,7 @@ public class TIA_ZonasBasicas {
     }
 
     //Método para comrpobar que se ha deserializado correctamente
-    public static void main(String[] args) {
+    public List<TIA_ZonasBasicas> deserializar() {
         // Ruta del archivo JSON
         String filePath = "src/main/resources/Covid19-TIA_ZonasBásicasSalud.json";
 
@@ -127,6 +127,10 @@ public class TIA_ZonasBasicas {
         } else {
             System.out.println("Error en la deserialización del JSON.");
         }
+
+
+        return listaZonas;
+
     }
 
     //Método para leer el archivo JSON
