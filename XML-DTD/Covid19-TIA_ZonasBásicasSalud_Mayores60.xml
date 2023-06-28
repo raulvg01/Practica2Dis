@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <data>
+    <codigo_geometria>001</codigo_geometria>
+    <zona_basica_salud>Abrantes</zona_basica_salud>
+    <tasa_incidencia_acumulada_P60mas_ultimos_14dias>182.15</tasa_incidencia_acumulada_P60mas_ultimos_14dias>
+    <casos_confirmados_P60mas_ultimos_14dias>13</casos_confirmados_P60mas_ultimos_14dias>
+    <fecha_informe>2022/11/29 10:47:00</fecha_informe>
+  </data>
+  <data>
+    <codigo_geometria>002</codigo_geometria>
+    <zona_basica_salud>Acacias</zona_basica_salud>
+    <tasa_incidencia_acumulada_P60mas_ultimos_14dias>173.2</tasa_incidencia_acumulada_P60mas_ultimos_14dias>
+    <casos_confirmados_P60mas_ultimos_14dias>11</casos_confirmados_P60mas_ultimos_14dias>
+    <fecha_informe>2022/11/29 10:47:00</fecha_informe>
+  </data>
+
+.
+.
+.  
+
+</root>
