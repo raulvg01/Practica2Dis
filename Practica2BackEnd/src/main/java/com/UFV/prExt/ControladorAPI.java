@@ -1,5 +1,9 @@
 package com.UFV.prExt;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,36 +11,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@ControladorAPI
-@RequestMapping("/api")
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
+
+@RestController
+@RequestMapping("/api")
 public class ControladorAPI {
 
-
     private List<TIA_ZonasBasicas> listaZonas;
+    private JsonReader jsonReader = new JsonReader();
 
-    public ZonasController() {
-        cargarDatos();
-    }
 
     @GetMapping("/zonas")
-    public List<TIA_ZonasBasicas> obtenerZonas() {
+    public List<TIA_ZonasBasicas> getZonasBasicas() throws FileNotFoundException {
+        listaZonas = jsonReader.readJsonZonaBasica("src/main/resources/Covid19-TIA_ZonasBasicasSalud.json");
         return listaZonas;
     }
 
-    private void cargarDatos() {
-        try {
-            ClassPathResource resource = new ClassPathResource("datos.json");
-            InputStreamReader reader = new InputStreamReader(resource.getInputStream());
-
-            Gson gson = new Gson();
-            Type tipoLista = new TypeToken<List<TIA_ZonasBasicas>>(){}.getType();
-            listaZonas = gson.fromJson(reader, tipoLista);
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-}
+
+
+
+
+
+
+

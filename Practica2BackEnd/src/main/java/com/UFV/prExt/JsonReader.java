@@ -1,7 +1,18 @@
 package com.UFV.prExt;
 
+import com.google.gson.Gson;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.*;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class JsonReader {
 
@@ -19,17 +30,16 @@ public class JsonReader {
         return content.toString();
     }
 
-/*
-   //Metodo para escribir en el archibo json
-   public void writeJsonUsuario(ArrayList<Usuario> usuarios) throws IOException {
-       Gson gson = new GsonBuilder().create();
-       FileWriter writer = new FileWriter("usuarios.json");
-       JsonWriter jsonWriter = new JsonWriter(writer);
-       jsonWriter.setIndent("  ");
-       JsonArray jsonArray = gson.toJsonTree(usuarios).getAsJsonArray();
-       System.out.println(jsonArray.toString());
-       gson.toJson(jsonArray, jsonWriter);
-       jsonWriter.close();
-   }*/
+    public List<TIA_ZonasBasicas> readJsonZonaBasica(String json) throws FileNotFoundException {
 
+        String JSON = readFileAsString(json);
+        JSON = JSON.replace("/", "-");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        DataWrapper dataWrapper = gson.fromJson(JSON, DataWrapper.class);
+        List<TIA_ZonasBasicas> listaZonas = dataWrapper.getData();
+
+        //System.out.println(listaZonas.get(0).getTodo());
+        return listaZonas;
+
+    }
 }

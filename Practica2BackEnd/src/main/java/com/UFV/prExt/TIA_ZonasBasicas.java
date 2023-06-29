@@ -20,7 +20,6 @@ public class TIA_ZonasBasicas {
     Float tasa_incidencia_acumulada_ultimos_14dias;
     Float tasa_incidencia_acumulada_total;
     int casos_confirmados_totales;
-    int casos_confirmados_ultimos_14dias;
     Date fecha_informe;
 
     public TIA_ZonasBasicas() {
@@ -32,7 +31,6 @@ public class TIA_ZonasBasicas {
         this.tasa_incidencia_acumulada_ultimos_14dias = tasa_incidencia_acumulada_ultimos_14dias;
         this.tasa_incidencia_acumulada_total = tasa_incidencia_acumulada_total;
         this.casos_confirmados_totales = casos_confirmados_totales;
-        this.casos_confirmados_ultimos_14dias = casos_confirmados_ultimos_14dias;
         this.fecha_informe = fecha_informe;
     }
 
@@ -56,12 +54,20 @@ public class TIA_ZonasBasicas {
         return casos_confirmados_totales;
     }
 
-    public int getCasos_confirmados_ultimos_14dias() {
-        return casos_confirmados_ultimos_14dias;
-    }
 
     public Date getFecha_informe() {
         return fecha_informe;
+    }
+
+    public String getTodo() {
+
+        return "Codigo geometria: " + codigo_geometria + "\n" +
+                "Zona basica salud: " + zona_basica_salud + "\n" +
+                "Tasa incidencia acumulada ultimos 14 dias: " + tasa_incidencia_acumulada_ultimos_14dias + "\n" +
+                "Tasa incidencia acumulada total: " + tasa_incidencia_acumulada_total + "\n" +
+                "Casos confirmados totales: " + casos_confirmados_totales + "\n" +
+                "Fecha informe: " + fecha_informe + "\n";
+
     }
 
     public void setCodigo_geometria(String codigo_geometria) {
@@ -84,67 +90,12 @@ public class TIA_ZonasBasicas {
         this.casos_confirmados_totales = casos_confirmados_totales;
     }
 
-    public void setCasos_confirmados_ultimos_14dias(int casos_confirmados_ultimos_14dias) {
-        this.casos_confirmados_ultimos_14dias = casos_confirmados_ultimos_14dias;
-    }
 
     public void setFecha_informe(Date fecha_informe) {
         this.fecha_informe = fecha_informe;
     }
 
 
-    public static List<TIA_ZonasBasicas> deserializarZonasBasicas(String json) {
-        Gson gson = new Gson();
-        TypeToken<List<TIA_ZonasBasicas>> token = new TypeToken<List<TIA_ZonasBasicas>>() {};
-        List<TIA_ZonasBasicas> listaZonasBasicas = gson.fromJson(json, token.getType());
-        return listaZonasBasicas;
-    }
-
-    //Método para comrpobar que se ha deserializado correctamente
-    public List<TIA_ZonasBasicas> deserializar() {
-        // Ruta del archivo JSON
-        String filePath = "src/main/resources/Covid19-TIA_ZonasBásicasSalud.json";
-
-        // Leer el contenido del archivo y convertirlo en una cadena de texto
-        String json = readFileAsString(filePath);
-
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("yyyy/MM/dd HH:mm:ss");
-        Gson gson = gsonBuilder.create();
-
-        DataWrapper wrapper = gson.fromJson(json, DataWrapper.class);
-        List<TIA_ZonasBasicas> listaZonas = wrapper.getData();
-
-        if (listaZonas != null && !listaZonas.isEmpty()) {
-            for (TIA_ZonasBasicas zona : listaZonas) {
-                System.out.println("Código de Geometría: " + zona.getCodigo_geometria());
-                System.out.println("Zona Básica de Salud: " + zona.getZona_basica_salud());
-                System.out.println("Tasa de Incidencia Acumulada en los Últimos 14 Días: " + zona.getTasa_incidencia_acumulada_ultimos_14dias());
-                System.out.println("Tasa de Incidencia Acumulada Total: " + zona.getTasa_incidencia_acumulada_total());
-                System.out.println("Casos Confirmados Totales: " + zona.getCasos_confirmados_totales());
-                System.out.println("Fecha de Informe: " + zona.getFecha_informe());
-                System.out.println("--------------------------");
-            }
-        } else {
-            System.out.println("Error en la deserialización del JSON.");
-        }
 
 
-        return listaZonas;
-
-    }
-
-    //Método para leer el archivo JSON
-    public static String readFileAsString(String filePath) {
-        StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return content.toString();
-    }
 }
