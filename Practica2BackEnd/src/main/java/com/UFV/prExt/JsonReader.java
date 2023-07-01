@@ -3,8 +3,10 @@ package com.UFV.prExt;
 import com.google.gson.Gson;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -36,10 +38,48 @@ public class JsonReader {
         JSON = JSON.replace("/", "-");
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         DataWrapper dataWrapper = gson.fromJson(JSON, DataWrapper.class);
-        List<TIA_ZonasBasicas> listaZonas = dataWrapper.getData();
+        List<TIA_ZonasBasicas> listaZonas = dataWrapper.getDataBasicas();
 
         //System.out.println(listaZonas.get(0).getTodo());
         return listaZonas;
 
     }
+
+    public List<TIA_ZonasBasicas_Edad> readJsonZonaEdad(String json) throws FileNotFoundException {
+
+        String JSON = readFileAsString(json);
+        JSON = JSON.replace("/", "-");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        DataWrapper dataWrapper = gson.fromJson(JSON, DataWrapper.class);
+        List<TIA_ZonasBasicas_Edad> listaZonas = dataWrapper.getDataEdad();
+
+        //System.out.println(listaZonas.get(0).getTodo());
+        return listaZonas;
+
+    }
+
+
+    public void writeJsonBasicas(List<TIA_ZonasBasicas> zonaBasica, String json) throws IOException {
+        //System.out.println(tweets.get(0).getTweet());
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        FileWriter writer = new FileWriter(json);
+        JsonWriter jsonWriter = new JsonWriter(writer);
+        jsonWriter.setIndent("  ");
+        JsonArray jsonArray = gson.toJsonTree(zonaBasica).getAsJsonArray();
+        System.out.println(jsonArray.toString());
+        gson.toJson(jsonArray, jsonWriter);
+        jsonWriter.close();
+    }
+
+    public void writeJsonEdad(List<TIA_ZonasBasicas_Edad> zonaBasica, String jsonEdad) throws IOException {
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        FileWriter writer = new FileWriter(jsonEdad);
+        JsonWriter jsonWriter = new JsonWriter(writer);
+        jsonWriter.setIndent("  ");
+        JsonArray jsonArray = gson.toJsonTree(zonaBasica).getAsJsonArray();
+        System.out.println(jsonArray.toString());
+        gson.toJson(jsonArray, jsonWriter);
+        jsonWriter.close();
+    }
+
 }
