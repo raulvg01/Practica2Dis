@@ -36,10 +36,25 @@ public class JsonReader {
         JSON = JSON.replace("/", "-");
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         DataWrapper dataWrapper = gson.fromJson(JSON, DataWrapper.class);
-        List<TIA_ZonasBasicas> listaZonas = dataWrapper.getData();
+        List<TIA_ZonasBasicas> listaZonas = dataWrapper.getDataBasicas();
 
         //System.out.println(listaZonas.get(0).getTodo());
         return listaZonas;
 
     }
+
+    public List<TIA_ZonasBasicas_Edad> readJsonZonaEdad(String json) throws FileNotFoundException {
+
+        String JSON = readFileAsString(json);
+        JSON = JSON.replace("/", "-");
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        DataWrapper dataWrapper = gson.fromJson(JSON, DataWrapper.class);
+        List<TIA_ZonasBasicas_Edad> listaZonas = dataWrapper.getDataEdad();
+
+        //System.out.println(listaZonas.get(0).getTodo());
+        return listaZonas;
+
+    }
+
+
 }

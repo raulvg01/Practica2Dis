@@ -23,15 +23,29 @@ import java.util.List;
 @RequestMapping("/api")
 public class ControladorAPI {
 
-    private List<TIA_ZonasBasicas> listaZonas;
+    private List<TIA_ZonasBasicas> listaZonasBasicas;
+    private List<TIA_ZonasBasicas_Edad> listaZonasEdad;
+
+    private String jsonZonaBasica = "src/main/resources/Covid19-TIA_ZonasBasicasSalud.json";
+
+    private String jsonZonaEdad = "src/main/resources/Covid19-TIA_ZonasBasicasSalud_Mayores60.json";
+
     private JsonReader jsonReader = new JsonReader();
 
 
-    @GetMapping("/zonas")
+    @GetMapping("/zonasBasicas")
     public List<TIA_ZonasBasicas> getZonasBasicas() throws FileNotFoundException {
-        listaZonas = jsonReader.readJsonZonaBasica("src/main/resources/Covid19-TIA_ZonasBasicasSalud.json");
-        return listaZonas;
+        listaZonasBasicas = jsonReader.readJsonZonaBasica(jsonZonaBasica);
+        return listaZonasBasicas;
     }
+
+
+    @GetMapping("/zonasEdad")
+    public List<TIA_ZonasBasicas_Edad> getZonasEdad() throws FileNotFoundException {
+        listaZonasEdad = jsonReader.readJsonZonaEdad(jsonZonaEdad);
+        return listaZonasEdad;
+    }
+
 
     }
 
