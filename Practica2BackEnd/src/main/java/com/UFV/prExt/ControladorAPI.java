@@ -29,10 +29,16 @@ public class ControladorAPI {
 
     private String jsonEdad = "src/main/resources/Covid19-TIA_ZonasBasicas_Edad.json";
 
-    @GetMapping("/zonasBasicas")
-    public List<TIA_ZonasBasicas> getZonasBasicas() throws FileNotFoundException, ParseException {
+    @GetMapping("/zonasBasicasPrimera")
+    public List<TIA_ZonasBasicas> getZonasBasicasPrimera() throws FileNotFoundException, ParseException {
         listaZonasBasicas = jsonReader.readJsonZonaBasica(jsonBasicas);
        // System.out.println(listaZonasBasicas.get(0).getTodo());
+        return listaZonasBasicas;
+    }
+
+    @GetMapping("/zonasBasicas")
+    public List<TIA_ZonasBasicas> getZonasBasicas() throws FileNotFoundException, ParseException {
+        // System.out.println(listaZonasBasicas.get(0).getTodo());
         return listaZonasBasicas;
     }
     @PostMapping("/zonaBasica")
@@ -59,23 +65,23 @@ public class ControladorAPI {
         return listaZonasEdad;
     }
 
-    @PutMapping("/updateZonaBasica/{codigo_geometria}")
-    public void updateZonaBasica(@PathVariable String codigo_geometria, @RequestBody String zonaBasicaString) throws IOException {
+    @PostMapping("/updateZonaBasica")
+    public String updateZonaBasica(@RequestBody String zonaBasicaString) throws IOException {
         TIA_ZonasBasicas zonaBasica = gson.fromJson(zonaBasicaString, TIA_ZonasBasicas.class);
-
+        System.out.println(zonaBasica.getTodo());
         for (TIA_ZonasBasicas zona : listaZonasBasicas) {
-            if (zona.getCodigo_geometria().equals(codigo_geometria)) {
-                //zona.setCodigo_geometria(codigo_geometria);
+            if (zona.getId() == zonaBasica.getId()){
                 zona.setZona_basica_salud(zonaBasica.getZona_basica_salud());
-                zona.setFecha_informe(zonaBasica.getFecha_informe());
                 zona.setTasa_incidencia_acumulada_ultimos_14dias(zonaBasica.getTasa_incidencia_acumulada_ultimos_14dias());
                 zona.setTasa_incidencia_acumulada_total(zonaBasica.getTasa_incidencia_acumulada_total());
                 zona.setFecha_informe(zonaBasica.getFecha_informe());
-                //zona.setCodigo_geometria(zonaBasica.getCodigo_geometria());
-                break;
+                zona.setCasos_confirmados_totales(zonaBasica.getCasos_confirmados_totales());
+                zona.setCasos_confirmados_ultimos_14dias(zonaBasica.getCasos_confirmados_ultimos_14dias());
+                return "Zona actualizada";
             }
         }
-        jsonReader.writeJsonBasicas(listaZonasBasicas, jsonBasicas);
+        return "Zona no encontrada";
+        //jsonReader.writeJsonBasicas(listaZonasBasicas, jsonBasicas);
     }
 
     @PutMapping("/updateZonaBasicaEdad/{codigo_geometria}")

@@ -59,6 +59,7 @@ public class JsonReader {
             objetos = new ArrayList<>();
             int i = 0;
             int j = 0;
+            int id = 0;
 
             // Recorrer la lista de objetos y guardarlos en el ArrayList
             for (Map<String, Object> objeto : data) {
@@ -66,6 +67,8 @@ public class JsonReader {
                 TIA_ZonasBasicas auxZonaBasica = new TIA_ZonasBasicas();
                 auxZonaBasica.setCodigo_geometria((String) objeto.get("codigo_geometria"));
                 auxZonaBasica.setZona_basica_salud((String) objeto.get("zona_basica_salud"));
+                auxZonaBasica.setId(id);
+                id++;
 
                 // Convertir los campos de double a float
                 double tasaUltimos14dias = (Double) objeto.get("tasa_incidencia_acumulada_ultimos_14dias");
@@ -87,7 +90,7 @@ public class JsonReader {
 
                 //System.out.println("Id = "+ i + "AAAAAA" + objeto.get("casos_confirmados_totales"));
                 if (objeto.get("casos_confirmados_ultimos_14dias") != null)
-                auxZonaBasica.setCasos_confirmados_ultimos_14dias((Integer) objeto.get("casos_confirmados_ultimos_14dias"));
+                    auxZonaBasica.setCasos_confirmados_ultimos_14dias((Integer) objeto.get("casos_confirmados_ultimos_14dias"));
                 else{
                     auxZonaBasica.setCasos_confirmados_ultimos_14dias(0);
                     i++;
@@ -98,9 +101,9 @@ public class JsonReader {
                 listaZonasBasicas.add(auxZonaBasica);
             }
 
-            System.out.println("Numero de zonas14 null: " + i);
-            System.out.println("Numero de zonastotal null: " + j);
-            System.out.println("Numero de zonas: " + listaZonasBasicas.size());
+            //System.out.println("Numero de zonas14 null: " + i);
+            //System.out.println("Numero de zonastotal null: " + j);
+            //System.out.println("Numero de zonas: " + listaZonasBasicas.size());
             //System.out.println(listaZonasBasicas.get(0).getTodo());
 
             // Hacer uso de la lista de objetos TIA_ZonasBasicas según tus necesidades

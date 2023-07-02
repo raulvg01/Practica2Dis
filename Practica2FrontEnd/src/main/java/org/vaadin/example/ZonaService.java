@@ -16,14 +16,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class ZonaService implements Serializable{
 
+    public ArrayList<TIA_ZonasBasicas> getZonasBasicasPrimera() throws URISyntaxException, IOException, InterruptedException {
+        API api = new API();
+        String resultsAPI = api.getZonasBasicasPrimera();
+        //System.out.println(resultsAPI);
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        ArrayList<TIA_ZonasBasicas> listaZonasBasicas = gson.fromJson(resultsAPI, new TypeToken<ArrayList<TIA_ZonasBasicas>>(){}.getType());
+        //System.out.println(listaZonasBasicas.get(0).getTodo());
+        return listaZonasBasicas;
+    }
+
     public ArrayList<TIA_ZonasBasicas> getZonasBasicas() throws URISyntaxException, IOException, InterruptedException {
         API api = new API();
         String resultsAPI = api.getZonasBasicas();
-        System.out.println(resultsAPI);
+        //System.out.println(resultsAPI);
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         ArrayList<TIA_ZonasBasicas> listaZonasBasicas = gson.fromJson(resultsAPI, new TypeToken<ArrayList<TIA_ZonasBasicas>>(){}.getType());
-        System.out.println(listaZonasBasicas.get(0).getTodo());
+        //System.out.println(listaZonasBasicas.get(0).getTodo());
         return listaZonasBasicas;
+    }
+
+    public String updateZonaBasica(TIA_ZonasBasicas zonaBasicaUpdate) throws Exception {
+        API api = new API();
+
+
+        String resultsAPI = api.updateZonaBasica(zonaBasicaUpdate);
+
+
+        return resultsAPI;
     }
 
 
