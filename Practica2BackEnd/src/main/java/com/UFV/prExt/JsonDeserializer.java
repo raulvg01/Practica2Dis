@@ -24,12 +24,14 @@ public class JsonDeserializer <T>{
         }
     }
 
-
+/*
     public List<T> deserialize_list(String filePath, Class<T> targetType) throws IOException {
         try (FileReader reader = new FileReader(filePath)) {
             Type listType = TypeToken.getParameterized(List.class, targetType).getType();
             return gson.fromJson(reader, listType);
         }
     }
+
+ */
 }
 
