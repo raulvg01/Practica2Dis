@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +30,9 @@ public class ControladorAPI {
     private String jsonEdad = "src/main/resources/Covid19-TIA_ZonasBasicas_Edad.json";
 
     @GetMapping("/zonasBasicas")
-    public List<TIA_ZonasBasicas> getZonasBasicas() throws FileNotFoundException {
+    public List<TIA_ZonasBasicas> getZonasBasicas() throws FileNotFoundException, ParseException {
         listaZonasBasicas = jsonReader.readJsonZonaBasica(jsonBasicas);
+       // System.out.println(listaZonasBasicas.get(0).getTodo());
         return listaZonasBasicas;
     }
     @PostMapping("/zonaBasica")

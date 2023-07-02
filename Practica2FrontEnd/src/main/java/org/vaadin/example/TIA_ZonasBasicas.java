@@ -1,18 +1,7 @@
-package com.UFV.prExt;
+package org.vaadin.example;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
-import java.util.List;
 
 public class TIA_ZonasBasicas {
     String codigo_geometria;
@@ -20,7 +9,6 @@ public class TIA_ZonasBasicas {
     Float tasa_incidencia_acumulada_ultimos_14dias;
     Float tasa_incidencia_acumulada_total;
     int casos_confirmados_totales;
-    int casos_confirmados_ultimos_14dias;
     Date fecha_informe;
 
     public TIA_ZonasBasicas() {
@@ -32,7 +20,6 @@ public class TIA_ZonasBasicas {
         this.tasa_incidencia_acumulada_ultimos_14dias = tasa_incidencia_acumulada_ultimos_14dias;
         this.tasa_incidencia_acumulada_total = tasa_incidencia_acumulada_total;
         this.casos_confirmados_totales = casos_confirmados_totales;
-        this.casos_confirmados_ultimos_14dias = casos_confirmados_ultimos_14dias;
         this.fecha_informe = fecha_informe;
     }
 
@@ -55,9 +42,6 @@ public class TIA_ZonasBasicas {
     public int getCasos_confirmados_totales() {
         return casos_confirmados_totales;
     }
-    public int getCasos_confirmados_ultimos_14dias() {
-        return casos_confirmados_ultimos_14dias;
-    }
 
 
     public Date getFecha_informe() {
@@ -71,7 +55,6 @@ public class TIA_ZonasBasicas {
                 "Tasa incidencia acumulada ultimos 14 dias: " + tasa_incidencia_acumulada_ultimos_14dias + "\n" +
                 "Tasa incidencia acumulada total: " + tasa_incidencia_acumulada_total + "\n" +
                 "Casos confirmados totales: " + casos_confirmados_totales + "\n" +
-                "Casos confirmados ultimos 14 dias: " + casos_confirmados_ultimos_14dias + "\n" +
                 "Fecha informe: " + fecha_informe + "\n";
 
     }
@@ -95,10 +78,6 @@ public class TIA_ZonasBasicas {
     public void setCasos_confirmados_totales(int casos_confirmados_totales) {
         this.casos_confirmados_totales = casos_confirmados_totales;
     }
-    public void setCasos_confirmados_ultimos_14dias(int casos_confirmados_ultimos_14dias) {
-        this.casos_confirmados_ultimos_14dias = casos_confirmados_ultimos_14dias;
-    }
-
 
     public void setFecha_informe(Date fecha_informe) {
         this.fecha_informe = fecha_informe;
