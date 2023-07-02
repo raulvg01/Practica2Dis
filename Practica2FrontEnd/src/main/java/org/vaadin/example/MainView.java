@@ -73,6 +73,9 @@ public class MainView extends VerticalLayout {
 
         // Agregar el grid y el diálogo al layout principal
         add(gridZonasBasicas, editDialog);
+        // Agregar el botón "Nuevo"
+        Button newButton = new Button("Nuevo", e -> openNewDialog());
+        add(newButton);
     }
 
     private void configureEditDialog() {
@@ -97,8 +100,12 @@ public class MainView extends VerticalLayout {
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         HorizontalLayout buttonsLayout = new HorizontalLayout(cancelButton, saveButton);
 
+
+
         // Agregar layout y botones al diálogo
         editDialog.add(dialogLayout, buttonsLayout);
+
+
     }
 
     private void onGridItemDoubleClick(ItemDoubleClickEvent<TIA_ZonasBasicas> event) {
@@ -150,4 +157,20 @@ public class MainView extends VerticalLayout {
         // Cerrar el diálogo
         editDialog.close();
     }
+
+
+    private void openNewDialog() {
+        codigoGeometriaField.setReadOnly(false);
+        // Limpiar campos de texto
+        codigoGeometriaField.clear();
+        zonaBasicaSaludField.clear();
+        tasaIncidencia14DiasField.clear();
+        tasaIncidenciaTotalField.clear();
+        casosConfirmadosTotalesField.clear();
+        fechaInformeField.clear();
+
+        // Abrir el diálogo
+        editDialog.open();
+    }
+
 }
