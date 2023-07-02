@@ -42,11 +42,11 @@ public class ControladorAPI {
         return listaZonasBasicas;
     }
     @PostMapping("/zonaBasica")
-    public void addZonaBasica(@RequestBody String zonaBasicaString) throws IOException {
+    public String addZonaBasica(@RequestBody String zonaBasicaString) throws IOException {
         TIA_ZonasBasicas zonaBasica = gson.fromJson(zonaBasicaString, TIA_ZonasBasicas.class);
-        zonaBasica.setCodigo_geometria(String.valueOf(listaZonasBasicas.size()));
+        zonaBasica.setId(listaZonasBasicas.size());
         listaZonasBasicas.add(zonaBasica);
-        jsonReader.writeJsonBasicas(listaZonasBasicas, jsonBasicas);
+        return "Zona añadida correctamente";
 
     }
 

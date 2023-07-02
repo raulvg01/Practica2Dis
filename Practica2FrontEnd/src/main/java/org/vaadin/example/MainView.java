@@ -42,6 +42,7 @@ public class MainView extends VerticalLayout {
 
     // Crear el diálogo y los campos de texto
     private Dialog editDialog = new Dialog();
+    private Dialog addDialog = new Dialog();
     private TextField idField = new TextField("Id");
     private TextField codigoGeometriaField = new TextField("Código Geometria");
     private TextField zonaBasicaSaludField = new TextField("Zona Básica Salud");
@@ -99,7 +100,6 @@ public class MainView extends VerticalLayout {
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         HorizontalLayout buttonsLayout = new HorizontalLayout(cancelButton, saveButton);
-
 
 
         // Agregar layout y botones al diálogo
@@ -160,17 +160,57 @@ public class MainView extends VerticalLayout {
 
 
     private void openNewDialog() {
+        VerticalLayout dialogLayout = new VerticalLayout();
+        dialogLayout.add(codigoGeometriaField, zonaBasicaSaludField, tasaIncidencia14DiasField, tasaIncidenciaTotalField, casosConfirmadosTotalesField, fechaInformeField);
         codigoGeometriaField.setReadOnly(false);
-        // Limpiar campos de texto
-        codigoGeometriaField.clear();
-        zonaBasicaSaludField.clear();
-        tasaIncidencia14DiasField.clear();
-        tasaIncidenciaTotalField.clear();
-        casosConfirmadosTotalesField.clear();
-        fechaInformeField.clear();
+
+        Button cancelButton = new Button("Cancelar", e -> addDialog.close());
+        Button saveButton = new Button("Guardar", e -> {
+            try {
+                saveNewData();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(cancelButton, saveButton);
+
+        addDialog.add(dialogLayout, buttonsLayout);
 
         // Abrir el diálogo
-        editDialog.open();
+        addDialog.open();
     }
+
+    private void saveNewData() throws Exception {
+        ZonaService service = new ZonaService();
+        TIA_ZonasBasicas zonaBasicaAdd = new TIA_ZonasBasicas();
+        // Rellenar el objeto con los datos del formulario
+        zonaBasicaAdd.setCodigo_geometria(codigoGeometriaField.getValue());
+        zonaBasicaAdd.setZona_basica_salud(zonaBasicaSaludField.getValue());
+        zonaBasicaAdd.setTasa_incidencia_acumulada_ultimos_14dias(Float.parseFloat(tasaIncidencia14DiasField.getValue()));
+        zonaBasicaAdd.setTasa_incidencia_acumulada_total(Float.parseFloat(tasaIncidenciaTotalField.getValue()));
+        zonaBasicaAdd.setCasos_confirmados_totales(Integer.parseInt(casosConfirmadosTotalesField.getValue()));
+        LocalDate localDate = fechaInformeField.getValue();
+        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        java.util.Date date = java.util.Date.from(instant);
+        zonaBasicaAdd.setFecha_informe(date);
+        String result = service.addZonaBasica(zonaBasicaAdd);
+        System.out.println(result);
+        //Recargar la pagina
+        ArrayList<TIA_ZonasBasicas> listaZonasBasicas = new ArrayList<>();
+
+        try {
+            listaZonasBasicas = service.getZonasBasicas();
+        } catch (Exception ex) {
+            Notification.show("Error al leer las Zonas Basicas");
+        }
+
+        gridZonasBasicas.setItems(listaZonasBasicas);
+        gridZonasBasicas.setColumns("id","codigo_geometria", "zona_basica_salud", "tasa_incidencia_acumulada_ultimos_14dias", "tasa_incidencia_acumulada_total", "casos_confirmados_totales", "fecha_informe");
+
+        // Cerrar el diálogo
+        addDialog.close();
+    }
+
 
 }

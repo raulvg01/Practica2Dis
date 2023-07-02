@@ -38,10 +38,14 @@ public class ZonaService implements Serializable{
 
     public String updateZonaBasica(TIA_ZonasBasicas zonaBasicaUpdate) throws Exception {
         API api = new API();
-
-
         String resultsAPI = api.updateZonaBasica(zonaBasicaUpdate);
 
+        return resultsAPI;
+    }
+
+    public String addZonaBasica(TIA_ZonasBasicas zonaBasicaUpdate) throws Exception {
+        API api = new API();
+        String resultsAPI = api.addZonaBasica(zonaBasicaUpdate);
 
         return resultsAPI;
     }

@@ -44,7 +44,7 @@ public class API {
         return response.body();
     }
 
-    public String postZonaBasica(TIA_ZonasBasicas zonaBasica) throws Exception{
+    public String addZonaBasica(TIA_ZonasBasicas zonaBasica) throws Exception{
         // creamos la url de la api
         String fullUrl = String.format(urlPrefix, "zonaBasica", "");
 
