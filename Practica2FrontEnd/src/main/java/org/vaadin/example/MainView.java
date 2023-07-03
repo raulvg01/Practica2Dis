@@ -69,9 +69,14 @@ public class MainView extends VerticalLayout {
     private TextField tasa_incidencia_acumulada_P60mas_ultimos_14diasField = new TextField("Tasa Incidencia 14 Días");
     private TextField casos_confirmados_P60mas_ultimos_14diasField = new TextField("Casos 14 días");
     private DatePicker fechaInformeField2 = new DatePicker("Fecha Informe");
+    ArrayList<TIA_ZonasBasicas_Edad> listaZonasBasicasEdad = new ArrayList<>();
 
     VerticalLayout zonasBasicasLayout = new VerticalLayout();
     VerticalLayout zonasBasicasEdadLayout = new VerticalLayout();
+
+    //VerticalLayout de todo el contenido
+    private final VerticalLayout contenido = new VerticalLayout();
+
 
 
 
@@ -82,21 +87,16 @@ public class MainView extends VerticalLayout {
         Tab tabZonasBasicas = new Tab("Zonas Básicas");
         Tab tabZonasEdad = new Tab("Zonas Básicas Edad");
         tabs.add(tabZonasBasicas, tabZonasEdad);
-        //tabs.add(tabZonasBasicas);
         add(tabs);
 
-        // Crear un contenedor para las pestañas
-        Div tabContainer = new Div();
-        add(tabContainer);
+        // Contenedor de pestaña Zonas Básicas
+        zonasBasicasLayout.add(gridZonasBasicas);
 
-        // Crear un layout para la pestaña de Zonas Básicas
-        zonasBasicasLayout.setVisible(true);
-
-        // Crear un layout para la pestaña de Zonas Básicas Edad
-        zonasBasicasEdadLayout.setVisible(false);
+        // Contenedor de pestaña Zonas Básicas Edad
+        zonasBasicasEdadLayout.add(gridZonasBasicasEdad);
 
         // Agregar el contenido existente del método MainView al layout de Zonas Básicas
-           try {
+        try {
             listaZonasBasicas = service.getZonasBasicasPrimera();
         } catch (Exception ex) {
             Notification.show("Error al leer las Zonas Basicas");
@@ -119,10 +119,10 @@ public class MainView extends VerticalLayout {
         gridZonasBasicasEdad.setItems(listaZonasBasicasEdad);
 
 
-        // Configurar el diálogo
+
+
+        // Configurar el diálogo de edición
         configureEditDialog();
-
-
         // Agregar el listener de doble clic al grid
         gridZonasBasicas.addItemDoubleClickListener(this::onGridItemDoubleClick);
 
@@ -132,38 +132,30 @@ public class MainView extends VerticalLayout {
         // Agregar el listener de doble clic al grid 2
         gridZonasBasicasEdad.addItemDoubleClickListener(this::onGridItemDoubleClick2);
 
-        // Agregar el grid y el diálogo al layout de Zonas Básicas
-       zonasBasicasLayout.add(gridZonasBasicas, editDialog);
+        // Agregar Grid y contenido al layout de Zonas Básicas
+        zonasBasicasLayout.add(gridZonasBasicas);
+        // Agregar grid y contenido al layout de Zonas Básicas Edad
+        zonasBasicasEdadLayout.add(gridZonasBasicasEdad);
 
-       add(gridZonasBasicas, editDialog);
-
-        // Agregar el grid y el diálogo al layout de Zonas Básicas Edad
-       zonasBasicasEdadLayout.add(gridZonasBasicasEdad, editDialog2);
-        Button refresh = new Button("Recargar datos", event -> {
-
-            gridZonasBasicas.setItems(listaZonasBasicas);
-
-        });
-
-        // Agregar el botón "Nuevo"
+        // Añadir botón de Nuevo al layout de Zonas Básicas
         Button newButton = new Button("Nuevo", e -> openNewDialog());
         zonasBasicasLayout.add(newButton);
-        add(zonasBasicasLayout);
-        add(gridZonasBasicas,newButton);
-        // Agregar el layout de Zonas Básicas al layout principal
-        add(zonasBasicasLayout, zonasBasicasEdadLayout);
 
-        // Agregar el listener de cambio de pestaña seleccionada
+        // Evento de cambio de pestaña
         tabs.addSelectedChangeListener(event -> {
-            tabContainer.removeAll();
-            if (event.getSelectedTab() == tabZonasBasicas) {
-                tabContainer.add(zonasBasicasLayout);
-            } else if (event.getSelectedTab() == tabZonasEdad) {
-                tabContainer.add(zonasBasicasEdadLayout);
+            if (event.getSelectedTab().equals(tabZonasBasicas)) {
+                contenido.removeAll();
+                contenido.add(zonasBasicasLayout);
+            } else if (event.getSelectedTab().equals(tabZonasEdad)) {
+                contenido.removeAll();
+                contenido.add(zonasBasicasEdadLayout);
             }
         });
-        // Inicialmente, mostrar el contenido de la primera pestaña
-        tabContainer.add(zonasBasicasLayout);
+
+        //Mostrar solo el primer Grid si no se ha seleccionado ninguna pestaña
+        contenido.add(zonasBasicasLayout);
+        add(contenido);
+
 
     }
 
@@ -313,25 +305,6 @@ public class MainView extends VerticalLayout {
         editDialog.open();
     }
 
-    /*
-    private void onGridItemDoubleClick2(ItemDoubleClickEvent<TIA_ZonasBasicas_Edad> event) {
-        TIA_ZonasBasicas_Edad selectedItem = event.getItem();
-        if (selectedItem != null) {
-            // Rellenar campos de texto con datos de la fila seleccionada
-            idField2.setValue(Integer.toString(selectedItem.getId()));
-            codigoGeometriaField2.setValue(selectedItem.getCodigo_geometria());
-            zonaBasicaSaludField2.setValue(selectedItem.getZona_basica_salud());
-            tasa_incidencia_acumulada_P60mas_ultimos_14diasField.setValue(Float.toString(selectedItem.getTasa_incidencia_acumulada_P60mas_ultimos_14dias()));
-            casos_confirmados_P60mas_ultimos_14diasField.setValue(String.valueOf(selectedItem.getCasos_confirmados_P60mas_ultimos_14dias()));
-            Instant instant = selectedItem.getFecha_informe().toInstant();
-            LocalDateTime localDateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-            fechaInformeField2.setValue(localDateTime.toLocalDate());
-            // Abrir el diálogo
-            editDialog2.open();
-        }
-    }
-*/
-
     private void saveEditedData() throws Exception {
         ZonaService service = new ZonaService();
        TIA_ZonasBasicas zonaBasicaUpdate = new TIA_ZonasBasicas();
@@ -357,16 +330,9 @@ public class MainView extends VerticalLayout {
         } catch (Exception ex) {
             Notification.show("Error al leer las Zonas Basicas");
         }
-        //zonasBasicasLayout.remove(gridZonasBasicas);
-
-        //System.out.println(listaZonasBasicas.get(0).getTodo());
 
         gridZonasBasicas.setItems(listaZonasBasicas);
         gridZonasBasicas.setColumns("id", "codigo_geometria", "zona_basica_salud", "tasa_incidencia_acumulada_ultimos_14dias", "tasa_incidencia_acumulada_total", "casos_confirmados_totales","casos_confirmados_ultimos_14dias", "fecha_informe");
-
-
-        //gridZonasBasicas.getDataProvider().refreshAll();
-        //zonasBasicasLayout.add(gridZonasBasicas);
 
         // Cerrar el diálogo
         editDialog.close();
@@ -475,6 +441,5 @@ public class MainView extends VerticalLayout {
         // Cerrar el diálogo
         addDialog.close();
     }
-
 
 }
