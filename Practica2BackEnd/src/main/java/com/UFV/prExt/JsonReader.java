@@ -57,13 +57,12 @@ public class JsonReader {
 
             // Crear un ArrayList para almacenar los objetos
             objetos = new ArrayList<>();
-            int i = 0;
-            int j = 0;
+
             int id = 0;
 
             // Recorrer la lista de objetos y guardarlos en el ArrayList
             for (Map<String, Object> objeto : data) {
-              //  i++;
+
                 TIA_ZonasBasicas auxZonaBasica = new TIA_ZonasBasicas();
                 auxZonaBasica.setCodigo_geometria((String) objeto.get("codigo_geometria"));
                 auxZonaBasica.setZona_basica_salud((String) objeto.get("zona_basica_salud"));
@@ -85,28 +84,20 @@ public class JsonReader {
                     auxZonaBasica.setCasos_confirmados_totales((Integer) objeto.get("casos_confirmados_totales"));
                 else{
                     auxZonaBasica.setCasos_confirmados_totales(0);
-                    j++;
+
                 }
 
-                //System.out.println("Id = "+ i + "AAAAAA" + objeto.get("casos_confirmados_totales"));
                 if (objeto.get("casos_confirmados_ultimos_14dias") != null)
                     auxZonaBasica.setCasos_confirmados_ultimos_14dias((Integer) objeto.get("casos_confirmados_ultimos_14dias"));
                 else{
                     auxZonaBasica.setCasos_confirmados_ultimos_14dias(0);
-                    i++;
+
                 }
 
                 auxZonaBasica.setFecha_informe(dateFormat.parse((String) objeto.get("fecha_informe")));
 
                 listaZonasBasicas.add(auxZonaBasica);
             }
-
-            //System.out.println("Numero de zonas14 null: " + i);
-            //System.out.println("Numero de zonastotal null: " + j);
-            //System.out.println("Numero de zonas: " + listaZonasBasicas.size());
-            //System.out.println(listaZonasBasicas.get(0).getTodo());
-
-            // Hacer uso de la lista de objetos TIA_ZonasBasicas según tus necesidades
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,13 +130,12 @@ public class JsonReader {
 
             // Crear un ArrayList para almacenar los objetos
             objetos = new ArrayList<>();
-            int i = 0;
-            int j = 0;
+
             int id = 0;
 
             // Recorrer la lista de objetos y guardarlos en el ArrayList
             for (Map<String, Object> objeto : data) {
-                //  i++;
+
                 TIA_ZonasBasicas_Edad auxZonaEdad = new TIA_ZonasBasicas_Edad();
                 auxZonaEdad.setCodigo_geometria((String) objeto.get("codigo_geometria"));
                 auxZonaEdad.setZona_basica_salud((String) objeto.get("zona_basica_salud"));
@@ -161,17 +151,14 @@ public class JsonReader {
                     auxZonaEdad.setTasa_incidencia_acumulada_P60mas_ultimos_14dias(tasaUltimos14diasFloat);
                 }else{
                     auxZonaEdad.setTasa_incidencia_acumulada_P60mas_ultimos_14dias(0.0f);
-                    j++;
+
                 }
 
                 if (objeto.get("casos_confirmados_P60mas_ultimos_14dias") != null)
                     auxZonaEdad.setCasos_confirmados_P60mas_ultimos_14dias((Integer) objeto.get("casos_confirmados_P60mas_ultimos_14dias"));
                 else{
                     auxZonaEdad.setCasos_confirmados_P60mas_ultimos_14dias(0);
-                    j++;
                 }
-
-                //System.out.println("Id = "+ i + "AAAAAA" + objeto.get("casos_confirmados_totales"));
 
 
                 auxZonaEdad.setFecha_informe(dateFormat.parse((String) objeto.get("fecha_informe")));
@@ -179,12 +166,7 @@ public class JsonReader {
                 listaZonasEdad.add(auxZonaEdad);
             }
 
-            System.out.println("Numero de casos null: " + i);
-            System.out.println("Numero de tasa null: " + j);
-            System.out.println("Numero de zonas: " + listaZonasEdad.size());
-            //System.out.println(listaZonasBasicas.get(0).getTodo());
 
-            // Hacer uso de la lista de objetos TIA_ZonasBasicas según tus necesidades
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -197,26 +179,5 @@ public class JsonReader {
     }
 
 
-    public void writeJsonBasicas(List<TIA_ZonasBasicas> zonaBasica, String json) throws IOException {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        //FileWriter writer = new FileWriter(json);
-        //JsonWriter jsonWriter = new JsonWriter(writer);
-        //jsonWriter.setIndent("  ");
-        JsonArray jsonArray = gson.toJsonTree(zonaBasica).getAsJsonArray();
-        System.out.println(jsonArray.toString());
-        //gson.toJson(jsonArray, jsonWriter);
-        //jsonWriter.close();
-    }
-
-    public void writeJsonEdad(List<TIA_ZonasBasicas_Edad> zonaBasica, String jsonEdad) throws IOException {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        //FileWriter writer = new FileWriter(jsonEdad);
-        //JsonWriter jsonWriter = new JsonWriter(writer);
-        //jsonWriter.setIndent("  ");
-        JsonArray jsonArray = gson.toJsonTree(zonaBasica).getAsJsonArray();
-        System.out.println(jsonArray.toString());
-        //gson.toJson(jsonArray, jsonWriter);
-        //jsonWriter.close();
-    }
 
 }
