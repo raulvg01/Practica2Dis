@@ -43,7 +43,7 @@ import java.util.Date;
 
 public class MainView extends VerticalLayout {
     private Grid<TIA_ZonasBasicas> gridZonasBasicas = new Grid<>(TIA_ZonasBasicas.class);
-    //private VerticalLayout pestanya1 = new VerticalLayout();
+    private VerticalLayout pestanya1 = new VerticalLayout();
     // Crear el diálogo y los campos de texto
     private Dialog editDialog = new Dialog();
     private Dialog addDialog = new Dialog();
@@ -69,13 +69,13 @@ public class MainView extends VerticalLayout {
     private TextField casos_confirmados_P60mas_ultimos_14diasField = new TextField("Casos 14 días");
     private DatePicker fechaInformeField2 = new DatePicker("Fecha Informe");
 */
-    //VerticalLayout zonasBasicasLayout = new VerticalLayout();
+    VerticalLayout zonasBasicasLayout = new VerticalLayout();
     //VerticalLayout zonasBasicasEdadLayout = new VerticalLayout();
 
 
 
     public MainView(@Autowired ZonaService service) {
-    /*
+
         // Crear componente de pestañas
         Tabs tabs = new Tabs();
         Tab tabZonasBasicas = new Tab("Zonas Básicas");
@@ -83,9 +83,9 @@ public class MainView extends VerticalLayout {
         //tabs.add(tabZonasBasicas, tabZonasEdad);
         tabs.add(tabZonasBasicas);
         add(tabs);
-*/
+
         // Crear un layout para la pestaña de Zonas Básicas
-        //zonasBasicasLayout.setVisible(true);
+        zonasBasicasLayout.setVisible(true);
         // Crear un layout para la pestaña de Zonas Básicas Edad
 
         //zonasBasicasEdadLayout.setVisible(false);
@@ -114,7 +114,7 @@ public class MainView extends VerticalLayout {
         gridZonasBasicasEdad.setColumns("id", "codigo_geometria", "zona_basica_salud", "tasa_incidencia_acumulada_P60mas_ultimos_14dias", "casos_confirmados_P60mas_ultimos_14dias", "fecha_informe");
 */
         // Configurar el diálogo
-        //configureEditDialog();
+        configureEditDialog();
 
 
 
@@ -129,9 +129,9 @@ public class MainView extends VerticalLayout {
         gridZonasBasicasEdad.addItemDoubleClickListener(this::onGridItemDoubleClick2);
 */
         // Agregar el grid y el diálogo al layout de Zonas Básicas
-       // zonasBasicasLayout.add(gridZonasBasicas, editDialog);
+       zonasBasicasLayout.add(gridZonasBasicas, editDialog);
 
-        //add(gridZonasBasicas, editDialog);
+        add(gridZonasBasicas, editDialog);
 
         // Agregar el grid y el diálogo al layout de Zonas Básicas Edad
        // zonasBasicasEdadLayout.add(gridZonasBasicasEdad, editDialog2);
@@ -143,8 +143,8 @@ public class MainView extends VerticalLayout {
 
         // Agregar el botón "Nuevo"
         Button newButton = new Button("Nuevo", e -> openNewDialog());
-        //zonasBasicasLayout.add(newButton);
-        //add(zonasBasicasLayout);
+        zonasBasicasLayout.add(newButton);
+        add(zonasBasicasLayout);
         add(gridZonasBasicas,newButton);
         // Agregar el layout de Zonas Básicas al layout principal
         //add(zonasBasicasLayout, zonasBasicasEdadLayout);
@@ -222,7 +222,7 @@ public class MainView extends VerticalLayout {
         editDialog.add(dialogLayout, buttonsLayout);
 
     }
-    
+
 
     private void onGridItemDoubleClick(ItemDoubleClickEvent<TIA_ZonasBasicas> event) {
         // Crear un nuevo diálogo de edición
