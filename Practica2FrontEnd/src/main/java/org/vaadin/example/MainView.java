@@ -74,7 +74,7 @@ public class MainView extends VerticalLayout {
     VerticalLayout zonasBasicasLayout = new VerticalLayout();
     VerticalLayout zonasBasicasEdadLayout = new VerticalLayout();
 
-    //VerticalLayout de todo el contenido
+    //VerticalLayout del contenido
     private final VerticalLayout contenido = new VerticalLayout();
 
 
@@ -115,8 +115,8 @@ public class MainView extends VerticalLayout {
         }
 
         //Grid<TIA_ZonasBasicas_Edad> gridZonasBasicasEdad = new Grid<>(TIA_ZonasBasicas_Edad.class);
-        gridZonasBasicasEdad.setColumns("id", "codigo_geometria", "zona_basica_salud", "tasa_incidencia_acumulada_P60mas_ultimos_14dias", "casos_confirmados_P60mas_ultimos_14dias", "fecha_informe");
         gridZonasBasicasEdad.setItems(listaZonasBasicasEdad);
+        gridZonasBasicasEdad.setColumns("id", "codigo_geometria", "zona_basica_salud", "tasa_incidencia_acumulada_P60mas_ultimos_14dias", "casos_confirmados_P60mas_ultimos_14dias", "fecha_informe");
 
 
 
@@ -156,7 +156,6 @@ public class MainView extends VerticalLayout {
         contenido.add(zonasBasicasLayout);
         add(contenido);
 
-
     }
 
 
@@ -167,8 +166,8 @@ public class MainView extends VerticalLayout {
         dialogLayout2.add(idField2,codigoGeometriaField2, zonaBasicaSaludField2, tasa_incidencia_acumulada_P60mas_ultimos_14diasField, casos_confirmados_P60mas_ultimos_14diasField, fechaInformeField2);
 
         // Hacer que el campo codigoGeometriaField sea de solo lectura
-        idField2.setReadOnly(true);
-        codigoGeometriaField2.setReadOnly(true);
+        idField.setReadOnly(true);
+        codigoGeometriaField.setReadOnly(true);
 
 
         // Configurar botones
@@ -179,6 +178,8 @@ public class MainView extends VerticalLayout {
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
+
+            gridZonasBasicasEdad.setItems(listaZonasBasicasEdad);
         });
         saveButton2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         HorizontalLayout buttonsLayout2 = new HorizontalLayout(cancelButton2, saveButton2);
@@ -298,11 +299,11 @@ public class MainView extends VerticalLayout {
 
         // Agregar los campos y los botones al diálogo
         VerticalLayout dialogLayout2 = new VerticalLayout();
-        dialogLayout2.add(idField, codigoGeometriaField, zonaBasicaSaludField, tasaIncidencia14DiasField, tasaIncidenciaTotalField, casosConfirmadosTotalesField, casosConfirmados14DiasField, fechaInformeField);
+        dialogLayout2.add(idField2,codigoGeometriaField2, zonaBasicaSaludField2, tasa_incidencia_acumulada_P60mas_ultimos_14diasField, casos_confirmados_P60mas_ultimos_14diasField, fechaInformeField2);
         editDialog2.add(dialogLayout2, buttonsLayout2);
 
         // Abrir el diálogo de edición
-        editDialog.open();
+        editDialog2.open();
     }
 
     private void saveEditedData() throws Exception {
@@ -355,17 +356,16 @@ public class MainView extends VerticalLayout {
         String result = service.updateZonaEdad(zonaEdadUpdate);
         System.out.println(result);
         //Recargar la pagina
-        ArrayList<TIA_ZonasBasicas_Edad> listaZonasEdad = new ArrayList<>();
 
         try {
-            listaZonasEdad = service.getZonasEdad();
+            listaZonasBasicasEdad = service.getZonasEdad();
         } catch (Exception ex) {
             Notification.show("Error al leer las Zonas Edad");
         }
 
-        System.out.println(listaZonasEdad.get(0).getTodo());
+        System.out.println(listaZonasBasicasEdad.get(0).getTodo());
 
-        gridZonasBasicasEdad.setItems(listaZonasEdad);
+        gridZonasBasicasEdad.setItems(listaZonasBasicasEdad);
         gridZonasBasicasEdad.setColumns( "id", "codigo_geometria", "zona_basica_salud", "tasa_incidencia_acumulada_P60mas_ultimos_14dias", "casos_confirmados_P60mas_ultimos_14dias", "fecha_informe");
 
 
