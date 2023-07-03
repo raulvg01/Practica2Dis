@@ -31,6 +31,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @Route
 @PWA(name = "Vaadin Application",
@@ -221,26 +222,51 @@ public class MainView extends VerticalLayout {
         editDialog.add(dialogLayout, buttonsLayout);
 
     }
+    
 
     private void onGridItemDoubleClick(ItemDoubleClickEvent<TIA_ZonasBasicas> event) {
-        TIA_ZonasBasicas selectedItem = event.getItem();
-        configureEditDialog();
-        if (selectedItem != null) {
-            // Rellenar campos de texto con datos de la fila seleccionada
-            idField.setValue(Integer.toString(selectedItem.getId()));
-            codigoGeometriaField.setValue(selectedItem.getCodigo_geometria());
-            zonaBasicaSaludField.setValue(selectedItem.getZona_basica_salud());
-            tasaIncidencia14DiasField.setValue(Float.toString(selectedItem.getTasa_incidencia_acumulada_ultimos_14dias()));
-            tasaIncidenciaTotalField.setValue(Float.toString(selectedItem.getTasa_incidencia_acumulada_total()));
-            casosConfirmadosTotalesField.setValue(String.valueOf(selectedItem.getCasos_confirmados_totales()));
-            casosConfirmados14DiasField.setValue(String.valueOf(selectedItem.getCasos_confirmados_ultimos_14dias()));
-            Instant instant = selectedItem.getFecha_informe().toInstant();
-            LocalDateTime localDateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-            fechaInformeField.setValue(localDateTime.toLocalDate());
-            // Abrir el diálogo
-            editDialog.open();
-        }
+        // Crear un nuevo diálogo de edición
+        Dialog editDialog = new Dialog();
+
+        // Obtener el elemento seleccionado del Grid
+        TIA_ZonasBasicas selectedZonaBasica = event.getItem();
+
+        // Configurar los campos del diálogo con los datos del elemento seleccionado
+        idField.setValue(String.valueOf(selectedZonaBasica.getId()));
+        idField.setReadOnly(true);
+        codigoGeometriaField.setValue(selectedZonaBasica.getCodigo_geometria());
+        zonaBasicaSaludField.setValue(selectedZonaBasica.getZona_basica_salud());
+        tasaIncidencia14DiasField.setValue(selectedZonaBasica.getTasa_incidencia_acumulada_ultimos_14dias().toString());
+        tasaIncidenciaTotalField.setValue(selectedZonaBasica.getTasa_incidencia_acumulada_total().toString());
+        casosConfirmadosTotalesField.setValue(String.valueOf(selectedZonaBasica.getCasos_confirmados_totales()));
+        casosConfirmados14DiasField.setValue(String.valueOf(selectedZonaBasica.getCasos_confirmados_ultimos_14dias()));
+        Date date = selectedZonaBasica.getFecha_informe();
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        fechaInformeField.setValue(localDate);
+
+        // Configurar los botones del diálogo
+        Button cancelButton = new Button("Cancelar", e -> editDialog.close());
+        Button saveButton = new Button("Guardar", e -> {
+            try {
+                saveEditedData();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            editDialog.close();
+        });
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(cancelButton, saveButton);
+
+        // Agregar los campos y los botones al diálogo
+        VerticalLayout dialogLayout = new VerticalLayout();
+        dialogLayout.add(idField, codigoGeometriaField, zonaBasicaSaludField, tasaIncidencia14DiasField, tasaIncidenciaTotalField, casosConfirmadosTotalesField, casosConfirmados14DiasField, fechaInformeField);
+        editDialog.add(dialogLayout, buttonsLayout);
+
+        // Abrir el diálogo de edición
+        editDialog.open();
     }
+
 
     /*
     private void onGridItemDoubleClick2(ItemDoubleClickEvent<TIA_ZonasBasicas_Edad> event) {
@@ -337,41 +363,11 @@ public class MainView extends VerticalLayout {
     }
 
      */
-    /*
-    private void openNewDialog() {
 
-        VerticalLayout dialogLayout = new VerticalLayout();
-        idField.clear();
-        codigoGeometriaField.clear();
-        zonaBasicaSaludField.clear();
-        tasaIncidencia14DiasField.clear();
-        tasaIncidenciaTotalField.clear();
-        casosConfirmadosTotalesField.clear();
-        casosConfirmados14DiasField.clear();
-        fechaInformeField.clear();
-        dialogLayout.add(codigoGeometriaField, zonaBasicaSaludField, tasaIncidencia14DiasField, tasaIncidenciaTotalField, casosConfirmadosTotalesField, casosConfirmados14DiasField,fechaInformeField);
-        codigoGeometriaField.setReadOnly(false);
-
-        Button cancelButton = new Button("Cancelar", e -> addDialog.close());
-        Button saveButton = new Button("Guardar", e -> {
-            try {
-                saveNewData();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        HorizontalLayout buttonsLayout = new HorizontalLayout(cancelButton, saveButton);
-
-        addDialog.add(dialogLayout, buttonsLayout);
-
-        // Abrir el diálogo
-        addDialog.open();
-    }
-*/
 
     private void openNewDialog() {
         // Crear un nuevo diálogo
+        Dialog addDialog = new Dialog();
 
         VerticalLayout dialogLayout = new VerticalLayout();
         idField.clear();
@@ -389,7 +385,7 @@ public class MainView extends VerticalLayout {
         Button saveButton = new Button("Guardar", e -> {
             try {
                 saveNewData();
-
+                addDialog.close();
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
