@@ -50,5 +50,32 @@ public class ZonaService implements Serializable{
         return resultsAPI;
     }
 
+    public ArrayList<TIA_ZonasBasicas_Edad> getZonasEdadPrimera() throws URISyntaxException, IOException, InterruptedException {
+        API api = new API();
+        String resultsAPI = api.getZonasEdadPrimera();
+        //System.out.println(resultsAPI);
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        ArrayList<TIA_ZonasBasicas_Edad> listaZonasEdad = gson.fromJson(resultsAPI, new TypeToken<ArrayList<TIA_ZonasBasicas_Edad>>(){}.getType());
+        //System.out.println(listaZonasBasicas.get(0).getTodo());
+        return listaZonasEdad;
+    }
+
+    public ArrayList<TIA_ZonasBasicas_Edad> getZonasEdad() throws URISyntaxException, IOException, InterruptedException {
+        API api = new API();
+        String resultsAPI = api.getZonasEdad();
+        //System.out.println(resultsAPI);
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        ArrayList<TIA_ZonasBasicas_Edad> listaZonasEdad = gson.fromJson(resultsAPI, new TypeToken<ArrayList<TIA_ZonasBasicas_Edad>>(){}.getType());
+        //System.out.println(listaZonasBasicas.get(0).getTodo());
+        return listaZonasEdad;
+    }
+
+    public String updateZonaEdad(TIA_ZonasBasicas_Edad zonaEdadUpdate) throws Exception {
+        API api = new API();
+        String resultsAPI = api.updateZonaEdad(zonaEdadUpdate);
+
+        return resultsAPI;
+    }
+
 
 }

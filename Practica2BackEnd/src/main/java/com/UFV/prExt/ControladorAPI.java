@@ -27,12 +27,13 @@ public class ControladorAPI {
 
     private String jsonBasicas = "src/main/resources/Covid19-TIA_ZonasBasicasSalud.json";
 
-    private String jsonEdad = "src/main/resources/Covid19-TIA_ZonasBasicas_Edad.json";
+    private String jsonEdad = "src/main/resources/Covid19-TIA_ZonasBasicasSalud_Mayores60.json";
+
 
     @GetMapping("/zonasBasicasPrimera")
     public List<TIA_ZonasBasicas> getZonasBasicasPrimera() throws FileNotFoundException, ParseException {
         listaZonasBasicas = jsonReader.readJsonZonaBasica(jsonBasicas);
-       // System.out.println(listaZonasBasicas.get(0).getTodo());
+        // System.out.println(listaZonasBasicas.get(0).getTodo());
         return listaZonasBasicas;
     }
 
@@ -50,25 +51,11 @@ public class ControladorAPI {
 
     }
 
-    @PostMapping("/zonaEdad")
-    public void addZonaEdad(@RequestBody String zonaEdadString) throws IOException {
-        TIA_ZonasBasicas_Edad zonaEdad = gson.fromJson(zonaEdadString, TIA_ZonasBasicas_Edad.class);
-        zonaEdad.setCodigo_geometria(String.valueOf(listaZonasBasicas.size()));
-        listaZonasEdad.add(zonaEdad);
-        jsonReader.writeJsonEdad(listaZonasEdad, jsonEdad);
-
-    }
-
-    @GetMapping("/zonasEdad")
-    public List<TIA_ZonasBasicas_Edad> getZonasEdad() throws FileNotFoundException {
-        listaZonasEdad = jsonReader.readJsonZonaEdad(jsonEdad);
-        return listaZonasEdad;
-    }
 
     @PostMapping("/updateZonaBasica")
     public String updateZonaBasica(@RequestBody String zonaBasicaString) throws IOException {
         TIA_ZonasBasicas zonaBasica = gson.fromJson(zonaBasicaString, TIA_ZonasBasicas.class);
-        System.out.println(zonaBasica.getTodo());
+        //System.out.println(zonaBasica.getTodo());
         for (TIA_ZonasBasicas zona : listaZonasBasicas) {
             if (zona.getId() == zonaBasica.getId()){
                 zona.setZona_basica_salud(zonaBasica.getZona_basica_salud());
@@ -84,24 +71,42 @@ public class ControladorAPI {
         //jsonReader.writeJsonBasicas(listaZonasBasicas, jsonBasicas);
     }
 
-    @PutMapping("/updateZonaBasicaEdad/{codigo_geometria}")
-    public void updateZonaBasicaEdad(@PathVariable String codigo_geometria, @RequestBody String zonaBasicaEdadString) throws IOException {
-        TIA_ZonasBasicas_Edad zonaBasicaEdad = gson.fromJson(zonaBasicaEdadString, TIA_ZonasBasicas_Edad.class);
 
-        for (TIA_ZonasBasicas_Edad zonaEdad : listaZonasEdad) {
-            if (zonaEdad.getCodigo_geometria().equals(codigo_geometria)) {
-                //zona.setCodigo_geometria(codigo_geometria);
-                zonaEdad.setZona_basica_salud(zonaBasicaEdad.getZona_basica_salud());
-                zonaEdad.setFecha_informe(zonaBasicaEdad.getFecha_informe());
-                zonaEdad.setTasa_incidencia_acumulada_P60mas_ultimos_14dias(zonaBasicaEdad.getTasa_incidencia_acumulada_P60mas_ultimos_14dias());
-                zonaEdad.setCasos_confirmados_P60mas_ultimos_14dias(zonaBasicaEdad.getCasos_confirmados_P60mas_ultimos_14dias());
-                zonaEdad.setFecha_informe(zonaBasicaEdad.getFecha_informe());
-                //zonaEdad.setCodigo_geometria(zonaBasicaEdad.getCodigo_geometria());
-                break;
+
+
+    @GetMapping("/zonasEdadPrimera")
+    public List<TIA_ZonasBasicas_Edad> getZonasEdadPrimera() throws FileNotFoundException, ParseException {
+        listaZonasEdad = jsonReader.readJsonZonaEdad(jsonEdad);
+        // System.out.println(listaZonasBasicas.get(0).getTodo());
+        return listaZonasEdad;
+    }
+
+    @GetMapping("/zonasEdad")
+    public List<TIA_ZonasBasicas_Edad> getZonasEdad() throws FileNotFoundException, ParseException {
+        // System.out.println(listaZonasBasicas.get(0).getTodo());
+        return listaZonasEdad;
+    }
+
+
+    @PostMapping("/updateZonaEdad")
+    public String updateZonaEdad(@RequestBody String zonaEdadString) throws IOException {
+        TIA_ZonasBasicas_Edad zonaEdad = gson.fromJson(zonaEdadString, TIA_ZonasBasicas_Edad.class);
+        //System.out.println(zonaBasica.getTodo());
+        for (TIA_ZonasBasicas_Edad zona : listaZonasEdad) {
+            if (zona.getId() == zonaEdad.getId()){
+                zona.setZona_basica_salud(zonaEdad.getZona_basica_salud());
+                zona.setTasa_incidencia_acumulada_P60mas_ultimos_14dias(zonaEdad.getTasa_incidencia_acumulada_P60mas_ultimos_14dias());
+                zona.setFecha_informe(zonaEdad.getFecha_informe());
+                zona.setCasos_confirmados_P60mas_ultimos_14dias(zonaEdad.getCasos_confirmados_P60mas_ultimos_14dias());
+                return "Zona actualizada";
             }
         }
-        jsonReader.writeJsonBasicas(listaZonasBasicas, jsonBasicas);
+        return "Zona no encontrada";
+        //jsonReader.writeJsonBasicas(listaZonasBasicas, jsonBasicas);
     }
+
+
+
 }
 
 

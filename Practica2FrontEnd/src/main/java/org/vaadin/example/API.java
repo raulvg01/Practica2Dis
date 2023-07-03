@@ -72,4 +72,47 @@ public class API {
         return response.body();
     }
 
+
+    public String getZonasEdadPrimera() throws URISyntaxException, IOException, InterruptedException {
+        String fullUrl = String.format(urlPrefix, "zonasEdadPrimera", "");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(fullUrl))
+                .GET()
+                .build();
+        HttpResponse<String> response = HttpClient
+                .newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        // System.out.println(response.body());
+        return response.body();
+    }
+
+    public String getZonasEdad() throws URISyntaxException, IOException, InterruptedException {
+        String fullUrl = String.format(urlPrefix, "zonasEdad", "");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(fullUrl))
+                .GET()
+                .build();
+        HttpResponse<String> response = HttpClient
+                .newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        // System.out.println(response.body());
+        return response.body();
+    }
+
+    public String updateZonaEdad(TIA_ZonasBasicas_Edad zonaEdadUpdated) throws Exception{
+        // creamos la url de la api
+        String fullUrl = String.format(urlPrefix, "updateZonaEdad", "");
+
+        // convertimos el objeto zona a json
+        JsonObject jsonObject = gson.toJsonTree(zonaEdadUpdated).getAsJsonObject();
+        // creamos un objeto HttpResquest con la url y el json
+        HttpRequest request = HttpRequest.newBuilder().uri(new URI(fullUrl)).POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString())).header("Content-Type", "application/json").build();
+        // obtenemos la respuesta de la api y la convertimos a String
+        HttpResponse<String> response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+        // devolvemos la respuesta
+        return response.body();
+    }
+
 }
